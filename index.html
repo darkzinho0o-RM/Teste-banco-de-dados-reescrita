@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reescrita — Editora de livros em papel reciclável</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F9F2;--surface:#fff;--text:#1F3D2B;--muted:#4D6B58;--green:#588C63;--mint:#A9D8C5;--sage:#C8DCC3;--sky:#BED7E5;--orchid:#D89FCB;--orange:#ED9535;--teal:#86BEAF;--line:#D3E3CF;--ink:#1F3D2B;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101C15;--surface:#182A1E;--text:#E6F1E3;--muted:#A9C2B0;--line:#2A4433;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101C15;--surface:#182A1E;--text:#E6F1E3;--muted:#A9C2B0;--line:#2A4433;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.6 Nunito,system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:10}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(2rem,5.5vw,3.2rem);font-weight:800}
+h2{font-size:clamp(1.5rem,3.5vw,2rem)}
+h3{font-size:1.15rem}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--surface);border-bottom:1px solid var(--line);z-index:11}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font:800 1.25rem Fraunces,Georgia,serif;color:var(--text);text-decoration:none}
+.brand svg{width:36px;height:36px}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:var(--text);text-decoration:none;font-weight:700;font-size:.93rem;padding:4px 0;border-bottom:2px solid transparent}
+nav a.on,nav a:hover{border-color:var(--orange)}
+.btn{display:inline-block;background:var(--orange);color:var(--ink);font:700 .95rem Nunito,sans-serif;padding:10px 22px;border-radius:999px;border:0;text-decoration:none;cursor:pointer}
+.btn.alt{background:transparent;border:2px solid currentColor}
+.btn.sm{padding:6px 14px;font-size:.85rem}
+.btn:disabled{opacity:.6;cursor:default}
+.page{display:none}.page.on{display:block}
+.hero{background:var(--sage);color:var(--ink);padding:64px 0}
+.hero .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
+.hero p{font-size:1.1rem;max-width:32em}
+.acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.hero svg{width:100%;max-width:240px;justify-self:center}
+section.blk{padding:52px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--green);border-radius:14px;padding:22px}
+.card ul{margin:0;padding-left:1.1em}
+.lead{max-width:40em;color:var(--muted)}
+.book{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.cover{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;font:800 1.2rem Fraunces,Georgia,serif;color:var(--ink);overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover}
+.book .in{padding:14px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.book .by{margin:0;color:var(--muted);font-size:.9rem}
+.book .syn{margin:0;font-size:.9rem;flex:1}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+form.box,.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+form.box{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:grid;gap:5px;font-weight:700;font-size:.9rem}
+.full{grid-column:1/-1}
+input,select,textarea{font:inherit;color:var(--text);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+input:focus,select:focus,textarea:focus{outline:3px solid var(--teal);border-color:var(--green)}
+.msg{border-radius:10px;padding:12px 14px;font-weight:600;background:var(--mint);color:var(--ink)}
+.msg.err{background:var(--orchid)}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--text);cursor:pointer}
+.total{font:800 1.4rem Fraunces,Georgia,serif;text-align:right;margin:14px 0}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.muted{color:var(--muted)}
+footer{background:var(--green);color:#fff;text-align:center;padding:24px 20px;font-size:.9rem}
+@media(max-width:760px){.hero .wrap{grid-template-columns:1fr}form.box{grid-template-columns:1fr}.hero svg{max-width:150px;order:-1}.item{grid-template-columns:1fr auto}}
+#gate{display:none;position:fixed;inset:0;z-index:50;background:var(--sage);color:var(--ink);align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 20px) 20px 20px;overflow:auto}
+body.locked #gate{display:flex}
+body.locked header,body.locked main,body.locked footer{display:none}
+#gate .box{width:100%;max-width:400px;color:var(--text);display:grid;gap:14px}
+#gate form{display:grid;gap:12px}
+#gate svg{width:84px;height:84px;justify-self:center}
+</style>
+</head>
+<body class="locked">
+<header><div class="wrap">
+<a class="brand" href="#inicio"><svg viewBox="0 0 560 560" aria-hidden="true"><use href="#logo"/></svg>Reescrita</a>
+<nav id="nav">
+<a href="#inicio" data-p="inicio">Início</a><a href="#sobre" data-p="sobre">Sobre</a><a href="#encomendar" data-p="encomendar">Encomendar</a><a href="#contato" data-p="contato">Contato</a><a href="#carrinho" data-p="carrinho">Carrinho (<span id="cc">0</span>)</a><a href="#area-adm" data-p="area-adm" id="admlink" hidden>Área administrativa</a><a href="#" id="logout">Sair</a>
+</nav>
+</div></header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 560 560"><path fill-rule="evenodd" fill="rgb(77.64%, 98.43%, 64.31%)" fill-opacity="1" d="M 252.35 497.73 C 247.10 497.83 242.37 498.08 236.25 497.48 C 230.12 496.89 222.32 495.63 215.60 494.23 C 208.87 492.80 202.64 491.12 196 488.94 C 189.35 486.81 182.83 484.53 175.73 481.25 C 168.59 477.96 159.87 473.23 153.30 469.24 C 146.71 465.21 140.98 460.94 136.14 457.20 C 131.32 453.46 128.73 451.14 124.25 446.77 C 119.76 442.36 113.53 435.82 109.33 430.85 C 105.14 425.87 102.12 421.50 99.01 416.85 C 95.89 412.19 93.13 407.46 90.64 402.85 C 88.16 398.23 85.78 393.05 84.10 389.19 C 82.42 385.35 81.55 382.82 80.57 379.75 C 79.58 376.67 79.20 376.07 78.29 370.64 C 77.38 365.22 75.63 354.19 75.10 347.19 C 74.58 340.19 74.65 335.05 75.07 328.64 C 75.49 322.24 76.61 314.23 77.59 308.69 C 78.60 303.17 79.87 299.84 80.98 295.39 C 81.26 295.32 81.58 295.26 81.89 295.22 C 82.14 295.50 82.00 292.73 82.63 296.10 C 83.30 299.46 84.55 309.67 85.71 315.35 C 86.87 321.01 88.12 325.39 89.60 330.05 C 91.07 334.70 92.32 338.20 94.46 343.35 C 96.60 348.49 99.26 354.76 102.48 360.85 C 105.66 366.94 109.48 373.51 113.75 379.78 C 118.01 386.05 123.79 393.29 128.10 398.44 C 132.40 403.55 136.35 407.39 139.51 410.55 C 142.66 413.69 143.95 414.71 147 417.37 C 150.04 420 154.35 423.64 157.85 426.33 C 161.35 429.03 163.37 430.57 168 433.54 C 172.62 436.55 179.12 440.82 185.5 444.21 C 191.87 447.64 198.73 450.94 206.14 453.98 C 213.57 457.03 221.30 460.03 229.94 462.42 C 238.59 464.83 249.19 466.96 257.94 468.40 C 266.69 469.80 276.78 470.43 282.44 470.92 C 288.12 471.37 286.92 471.27 291.89 471.17 C 296.87 471.03 305.44 470.82 312.19 470.19 C 318.95 469.55 325.57 468.64 332.5 467.35 C 339.42 466.05 348.42 463.78 353.85 462.38 C 359.27 460.98 360.95 460.32 365.05 458.85 C 369.14 457.41 375.79 454.47 378.35 453.63 C 380.90 452.82 379.64 453.84 380.27 453.94 C 380.10 454.40 381.14 454.12 379.78 455.35 C 378.42 456.57 375.96 458.60 372.12 461.30 C 368.26 463.99 360.81 468.92 356.64 471.48 C 352.48 474.07 351.50 474.77 347.19 476.73 C 342.89 478.69 336.94 481.03 330.75 483.17 C 324.55 485.27 316.75 487.69 310.10 489.44 C 303.44 491.15 297.92 492.30 290.85 493.53 C 283.78 494.76 274.15 496.08 267.75 496.78 C 261.34 497.48 257.60 497.62 252.35 497.73 Z M 252.35 497.73 "/>
+<path fill-rule="evenodd" fill="rgb(49.01%, 72.15%, 34.50%)" fill-opacity="1" d="M 73.5 395.88 C 73.11 395.64 73.92 397.77 72.37 395.14 C 70.87 392.52 67.96 388.14 64.32 380.10 C 60.65 372.05 53.93 355.87 50.39 346.78 C 46.86 337.67 45.42 333.65 43.01 325.5 C 40.60 317.34 37.51 304.60 35.94 297.85 C 34.37 291.09 34.37 290.92 33.49 284.89 C 32.62 278.87 31.18 271.17 30.62 261.80 C 30.10 252.42 30.27 235.79 30.27 228.55 C 30.27 221.30 30.27 222.84 30.66 218.39 C 31.04 213.95 32.05 204.89 32.55 201.84 C 33.03 198.83 33.25 200.76 33.60 200.19 C 33.87 201.00 34.12 200.55 34.40 202.64 C 34.68 204.75 34.64 208.00 35.24 212.80 C 35.87 217.59 37.17 226.27 38.04 231.35 C 38.95 236.42 39.93 240.80 40.56 243.25 C 41.23 245.69 41.51 245.17 42 246.12 C 43.75 237.23 45.18 227.81 47.21 219.44 C 49.24 211.08 51.34 203.98 54.25 196 C 57.12 188.01 60.72 179.30 64.53 171.5 C 68.32 163.69 72.13 156.69 76.96 149.10 C 81.79 141.50 87.81 133.10 93.48 126 C 99.19 118.89 104.71 112.69 111.12 106.39 C 117.53 100.10 124.70 93.83 131.87 88.19 C 139.08 82.56 147.38 76.92 154.35 72.55 C 161.31 68.17 166.14 65.51 173.63 61.94 C 181.08 58.37 191.27 54.07 199.14 51.20 C 207.02 48.33 213.85 46.44 220.85 44.66 C 227.85 42.87 234.04 41.61 241.14 40.49 C 248.25 39.37 254.62 38.39 263.55 37.97 C 272.47 37.55 285.53 37.51 294.69 37.97 C 303.87 38.46 310.73 39.55 318.5 40.84 C 326.26 42.14 334.49 44.06 341.25 45.81 C 348.00 47.56 352.10 48.78 359.10 51.41 C 366.10 54.03 375.44 57.71 383.25 61.49 C 391.05 65.30 399.07 69.85 406 74.16 C 412.92 78.50 419.57 83.44 424.89 87.46 C 430.21 91.45 432.94 93.73 437.85 98.21 C 442.75 102.65 448.45 107.83 454.30 114.30 C 460.14 120.82 467.70 130.12 472.85 137.16 C 477.99 144.19 481.73 150.5 485.23 156.44 C 488.77 162.39 491.32 167.47 493.92 172.89 C 496.54 178.32 498.82 183.67 500.88 189 C 502.94 194.32 504.62 199.04 506.37 204.75 C 508.12 210.45 509.94 216.92 511.38 223.30 C 512.82 229.67 514.11 237.54 514.95 242.89 C 515.79 248.25 516.03 248.92 516.39 255.5 C 516.73 262.07 517.16 276.78 517.12 282.44 C 517.08 288.12 516.53 287.17 516.25 289.51 C 515.89 288.92 516.17 292.32 515.19 287.69 C 514.18 283.07 512.60 270.82 510.33 261.80 C 508.05 252.76 504.35 241.5 501.55 233.51 C 498.75 225.53 495.80 218.99 493.53 213.85 C 491.26 208.70 490.91 207.89 487.96 202.64 C 485.06 197.39 480.51 189.17 476 182.45 C 471.48 175.69 465.25 167.64 460.94 162.26 C 456.64 156.87 453.80 153.92 450.20 150.14 C 446.56 146.37 442.75 142.83 439.25 139.61 C 435.75 136.35 433.37 134.15 429.10 130.79 C 424.82 127.39 419.82 123.37 413.69 119.31 C 407.57 115.21 397.70 109.37 392.35 106.32 C 386.99 103.25 385.98 102.89 381.5 100.90 C 377.01 98.91 370.12 96.10 365.39 94.32 C 360.67 92.57 358.12 91.69 353.14 90.26 C 348.17 88.82 342.75 87.14 335.64 85.71 C 328.54 84.31 317.10 82.60 310.44 81.76 C 303.80 80.92 300.89 80.88 295.75 80.67 C 290.60 80.5 284.96 80.5 279.64 80.67 C 274.32 80.85 269.39 81.16 263.89 81.76 C 258.40 82.35 253.99 82.77 246.75 84.24 C 239.50 85.71 227.32 88.72 220.5 90.61 C 213.67 92.50 208.77 94.39 205.80 95.65 C 202.82 96.91 205.87 96.60 202.64 98.21 C 199.42 99.82 191.13 103.10 186.48 105.35 C 181.78 107.58 179.58 108.71 174.64 111.61 C 169.71 114.51 161.80 119.42 156.80 122.78 C 151.79 126.17 148.46 128.73 144.55 131.84 C 140.62 134.92 138.14 136.71 133.24 141.39 C 128.30 146.08 120.50 153.75 115.04 159.94 C 109.55 166.14 104.64 172.62 100.41 178.5 C 96.14 184.37 92.67 190.12 89.56 195.30 C 86.44 200.48 84.73 203.17 81.69 209.64 C 78.64 216.12 73.92 227.42 71.39 234.14 C 68.84 240.87 67.69 245.52 66.46 249.89 C 65.23 254.27 64.43 258.26 64.01 260.39 C 63.62 262.53 64.05 262.01 64.05 262.81 C 67.19 259.24 69.57 256.16 73.5 252.07 C 77.42 247.97 82.60 242.55 87.5 238.24 C 92.39 233.94 100.03 228.33 102.89 226.17 C 105.76 224 104.05 225.50 104.64 225.15 C 104.96 225.36 105.28 225.53 105.59 225.75 C 101.78 230.78 97.64 235.58 94.14 240.90 C 90.64 246.19 87.74 251.08 84.66 257.60 C 81.58 264.10 78.15 271.87 75.60 280 C 73.01 288.12 70.62 299.32 69.19 306.25 C 67.79 313.17 67.55 317.10 67.05 321.64 C 66.57 326.19 66.32 327.32 66.32 333.55 C 66.32 339.78 66.14 350.42 67.02 359.10 C 67.93 367.78 70.48 379.92 71.64 385.69 C 72.80 391.47 73.64 392.03 73.95 393.75 C 74.23 395.46 73.64 395.18 73.5 395.88 Z M 281.75 284.19 C 281.50 283.98 281.46 285.42 281.01 283.5 C 280.55 281.57 280.10 276.85 279.08 272.64 C 278.03 268.44 278.07 266.45 274.85 258.30 C 271.63 250.14 262.53 230.64 259.76 223.64 C 256.96 216.64 258.47 219.17 258.16 216.30 C 257.80 213.42 257.49 210.07 257.77 206.5 C 258.05 202.92 258.47 199.25 259.76 194.94 C 261.06 190.64 263.48 184.80 265.57 180.60 C 267.64 176.39 270.26 172.65 272.30 169.67 C 274.32 166.70 276.04 164.57 277.76 162.75 C 279.44 160.92 280.87 160.12 282.44 158.82 C 282.90 159.03 283.07 158.79 283.85 159.46 C 284.62 160.08 285.49 160.92 287.07 162.75 C 288.64 164.57 291.19 167.40 293.30 170.44 C 295.39 173.49 297.81 177.17 299.67 180.94 C 301.55 184.73 303.41 189.69 304.53 193.19 C 305.65 196.69 305.96 199.14 306.35 201.94 C 306.73 204.75 307.16 206.25 306.77 210 C 306.39 213.74 306.87 216.57 303.97 224.35 C 301.03 232.12 292.25 249.65 289.27 256.55 C 286.33 263.44 287.38 261.20 286.26 265.64 C 285.14 270.09 283.28 280.07 282.51 283.14 C 281.78 286.23 281.99 283.85 281.75 284.19 Z M 278.25 412.33 C 276.04 411.49 274.29 411.10 271.60 409.88 C 268.90 408.66 265.19 406.28 262.14 404.91 C 259.10 403.55 261.51 403.69 253.39 401.76 C 245.28 399.83 223.47 395.85 213.5 393.43 C 203.52 391.01 200.19 389.86 193.55 387.23 C 186.89 384.61 178.21 380.10 173.60 377.68 C 168.98 375.26 168.76 374.81 165.89 372.78 C 163.03 370.75 159.56 368.19 156.44 365.50 C 153.33 362.80 150.11 359.76 147.21 356.64 C 144.26 353.53 141.75 350.69 138.91 346.85 C 136.07 343 132.78 337.99 130.16 333.55 C 127.53 329.10 125.19 324.69 123.09 320.25 C 121.03 315.80 119.07 310.90 117.56 306.94 C 116.05 302.99 115.25 300.71 114.06 296.44 C 112.87 292.17 111.26 285.07 110.49 281.39 C 109.72 277.72 109.55 276.07 109.41 274.39 C 109.26 272.71 109.62 272.30 109.72 271.25 C 110.14 271.10 109.33 270.79 110.94 270.82 C 112.55 270.86 113.92 270.86 119.35 271.46 C 124.77 272.05 135.55 273.07 143.5 274.29 C 151.44 275.55 161.17 277.62 166.94 278.91 C 172.72 280.21 173.67 280.62 178.14 282.10 C 182.62 283.53 189.10 285.73 193.89 287.66 C 198.69 289.58 202.54 291.37 206.85 293.64 C 211.15 295.92 215.70 298.62 219.80 301.31 C 223.89 304.04 228.12 307.37 231.35 309.99 C 234.57 312.58 236.28 314.12 239.05 316.92 C 241.81 319.76 245.03 323.32 247.83 326.89 C 250.63 330.46 253.39 334.42 255.88 338.44 C 258.40 342.47 260.75 346.67 262.85 351.05 C 264.94 355.42 266.55 359.20 268.44 364.69 C 270.37 370.19 272.89 378.62 274.36 383.94 C 275.80 389.26 276.39 392.24 277.23 396.55 C 278.07 400.85 279.08 407.32 279.40 409.85 C 279.71 412.37 279.23 411.00 279.12 411.60 C 278.84 411.84 278.53 412.08 278.25 412.33 Z M 285.94 412.01 C 285.46 411.77 285.00 411.49 284.51 411.25 C 284.48 410.19 284.02 410.89 284.37 408.10 C 284.72 405.30 284.86 401.69 286.61 394.44 C 288.36 387.20 292.56 371.94 294.87 364.69 C 297.18 357.45 298.41 355.53 300.57 351.05 C 302.71 346.57 305.65 341.25 307.75 337.75 C 309.85 334.25 310.80 333.05 313.14 330.05 C 315.45 327.03 318.18 323.36 321.64 319.72 C 325.11 316.08 330.57 311.11 333.89 308.24 C 337.22 305.33 338.20 304.64 341.60 302.36 C 344.99 300.12 349.64 297.07 354.19 294.62 C 358.75 292.17 363.92 289.73 368.89 287.66 C 373.87 285.60 378.28 283.92 383.94 282.17 C 389.62 280.42 397.25 278.49 402.85 277.16 C 408.44 275.87 411.32 275.23 417.55 274.29 C 423.78 273.35 434.98 272.05 440.30 271.46 C 445.62 270.86 447.12 270.76 449.39 270.72 C 451.67 270.69 452.37 271.07 453.84 271.25 C 453.91 271.94 454.30 271.25 454.05 273.35 C 453.77 275.44 453.14 279.89 452.30 283.85 C 451.46 287.80 450.62 292.14 449.08 297.14 C 447.54 302.15 445.09 309.05 443.13 313.94 C 441.17 318.85 439.14 322.80 437.25 326.55 C 435.32 330.29 433.82 333.02 431.79 336.35 C 429.76 339.67 427.38 343.28 425.00 346.5 C 422.62 349.71 420.76 352.27 417.55 355.70 C 414.32 359.17 409.04 364.14 405.61 367.14 C 402.18 370.16 399.55 371.94 396.93 373.80 C 394.30 375.65 392.31 376.80 389.89 378.24 C 387.48 379.64 385.76 380.73 382.55 382.26 C 379.32 383.80 376.14 385.55 370.64 387.48 C 365.15 389.41 358.92 391.61 349.64 393.78 C 340.37 395.95 322.87 398.68 315 400.46 C 307.12 402.25 305.72 403.23 302.39 404.56 C 299.07 405.89 297.78 407.15 295.05 408.41 C 292.32 409.64 288.99 410.82 285.94 412.01 Z M 285.94 412.01 "/>
+<path fill-rule="evenodd" fill="rgb(3.92%, 39.60%, 0.39%)" fill-opacity="1" d="M 290.5 511.03 C 284.12 511.28 275.73 511.38 269.14 511.17 C 262.57 510.92 257.35 510.51 250.94 509.73 C 244.54 508.96 234.60 507.18 230.64 506.48 C 226.69 505.78 228.30 505.92 227.14 505.64 C 226.83 505.19 226.51 504.76 226.20 504.35 C 226.76 504.07 223.44 503.33 227.85 503.47 C 232.26 503.64 245.28 505.05 252.69 505.22 C 260.12 505.39 265.75 505.01 272.30 504.48 C 278.84 503.96 286.54 502.84 291.89 502.00 C 297.25 501.16 299.32 500.74 304.5 499.48 C 309.67 498.22 316.92 496.37 323.05 494.37 C 329.17 492.37 336.10 489.68 341.25 487.58 C 346.39 485.48 349.23 484.15 353.85 481.80 C 358.46 479.5 363.89 476.59 368.89 473.58 C 373.90 470.57 379.32 467.03 383.94 463.78 C 388.57 460.53 392.10 457.80 396.55 454.05 C 400.99 450.34 406.24 445.51 410.51 441.35 C 414.82 437.18 418.00 434 422.20 429.10 C 426.40 424.19 432.03 417.05 435.75 411.98 C 439.46 406.91 441.28 404.17 444.53 398.64 C 447.82 393.12 452.44 384.57 455.35 378.69 C 458.25 372.82 460.17 367.95 462.03 363.30 C 463.89 358.64 464.90 355.87 466.48 350.69 C 468.08 345.51 470.05 339.25 471.58 332.14 C 473.12 325.04 474.80 315.07 475.75 308 C 476.69 300.92 476.98 296.87 477.22 289.80 C 477.46 282.73 477.46 272.30 477.22 265.64 C 476.98 259 476.76 256.48 475.75 249.89 C 474.73 243.32 472.85 233.10 471.13 226.10 C 469.42 219.10 467.21 212.80 465.5 207.89 C 463.82 203 463.67 202.37 460.98 196.69 C 458.28 191.03 453.49 181.19 449.29 173.94 C 445.09 166.70 438.05 156.90 435.75 153.30 C 433.44 149.69 435.46 152.60 435.36 152.25 C 435.60 152.14 435.85 152.07 436.10 151.96 C 438.79 154.48 440.75 155.99 444.14 159.56 C 447.54 163.10 452.89 168.91 456.50 173.25 C 460.14 177.58 462.69 180.94 465.88 185.5 C 469.10 190.05 472.46 195.05 475.68 200.55 C 478.90 206.04 482.78 213.60 485.20 218.39 C 487.58 223.19 488.28 224.80 490.03 229.25 C 491.82 233.69 493.95 239.29 495.77 245 C 497.59 250.70 499.41 256.37 500.95 263.55 C 502.46 270.72 504.14 280.69 504.83 288.05 C 505.53 295.39 505.29 302.39 505.22 307.64 C 505.15 312.89 505.01 314.64 504.48 319.55 C 503.96 324.44 502.77 332.5 502.00 337.05 C 501.23 341.60 501.19 342.05 499.94 346.85 C 498.67 351.64 496.01 360.95 494.48 365.75 C 492.94 370.54 492.34 371.69 490.73 375.55 C 489.12 379.39 487.05 384.19 484.75 388.85 C 482.40 393.50 479.18 399.35 476.73 403.55 C 474.28 407.75 473.02 409.85 470.08 414.05 C 467.10 418.25 462.76 424.12 458.95 428.75 C 455.17 433.37 450.83 438.16 447.30 441.87 C 443.76 445.55 441.59 447.61 437.85 450.94 C 434.10 454.30 429.03 458.64 424.89 461.89 C 420.76 465.18 417.37 467.63 413 470.57 C 408.62 473.51 403.30 476.83 398.64 479.53 C 393.99 482.26 388.78 484.92 385 486.85 C 381.21 488.77 380.55 489.16 375.89 491.08 C 371.24 493.01 362.87 496.40 357 498.46 C 351.12 500.5 345.55 502.00 340.55 503.33 C 335.54 504.69 332.42 505.50 326.89 506.55 C 321.37 507.60 313.35 508.93 307.30 509.70 C 301.24 510.44 296.87 510.78 290.5 511.03 Z M 290.5 511.03 "/>
+<path fill-rule="evenodd" fill="rgb(8.62%, 43.52%, 23.52%)" fill-opacity="1" d="M 282.10 381.60 C 281.85 381.57 281.64 381.57 281.39 381.57 C 281.22 381.18 281.43 382.89 280.91 380.44 C 280.38 378 279.37 371.42 278.25 366.80 C 277.12 362.21 275.87 357.35 274.19 352.80 C 272.51 348.25 269.92 342.96 268.20 339.5 C 266.48 336.03 265.75 334.84 263.89 331.94 C 262.04 329.03 260.12 325.88 257.00 322 C 253.89 318.11 249.02 312.55 245.21 308.69 C 241.39 304.85 237.30 301.45 234.18 298.89 C 231.07 296.34 229.60 295.39 226.48 293.30 C 223.40 291.19 218.92 288.29 215.60 286.30 C 212.27 284.30 209.85 283.04 206.53 281.39 C 203.21 279.75 199.32 277.89 195.64 276.35 C 191.97 274.82 191.23 274.29 184.44 272.16 C 177.66 270.02 164.78 266.42 154.94 263.55 C 154.83 235.30 154.59 193.30 154.66 178.85 C 154.73 164.39 155.15 177.55 155.39 176.89 C 157.39 176.99 156.55 176.39 161.35 177.20 C 166.14 178.01 178.04 180.28 184.10 181.75 C 190.15 183.19 193.26 184.27 197.75 185.92 C 202.23 187.56 206.95 189.59 211.05 191.66 C 215.14 193.69 218.82 195.96 222.25 198.23 C 225.67 200.51 228.89 203.03 231.69 205.34 C 234.5 207.65 235.93 208.63 239.15 212.10 C 242.37 215.56 247.30 221.02 251.01 226.10 C 254.69 231.17 258.19 236.70 261.23 242.55 C 264.28 248.39 267.43 256.37 269.32 261.10 C 271.21 265.82 271.39 266.59 272.54 270.89 C 273.73 275.20 275.41 281.46 276.39 287 C 277.41 292.53 278.28 301.03 278.53 304.14 C 278.77 307.26 278.10 305.19 277.89 305.76 C 277.62 305.44 278.25 308.98 277.09 304.85 C 275.94 300.71 273.35 288.22 270.89 280.87 C 268.44 273.52 265.71 267.08 262.5 260.71 C 259.28 254.30 255.74 248.32 251.64 242.51 C 247.55 236.67 242.41 230.47 237.85 225.75 C 233.30 221.02 229.10 217.55 224.35 214.05 C 219.58 210.55 213.92 207.19 209.30 204.75 C 204.71 202.30 200.30 200.76 196.69 199.35 C 193.09 197.92 191.44 197.36 187.60 196.28 C 183.75 195.23 176.64 193.62 173.60 192.95 C 170.55 192.32 170.23 192.42 169.39 192.42 C 168.55 192.39 168.87 192.71 168.59 192.85 C 168.62 212.83 168.66 232.82 168.69 252.80 C 176.05 255.07 183.57 257.03 190.75 259.66 C 197.92 262.28 205.97 265.75 211.75 268.55 C 217.52 271.35 220.5 273.17 225.39 276.46 C 230.30 279.75 236.63 284.55 241.14 288.29 C 245.66 292.03 249.30 295.67 252.45 298.89 C 255.60 302.12 257.70 304.60 260.08 307.64 C 262.5 310.69 264.21 312.89 266.76 317.10 C 269.35 321.30 273.07 327.60 275.55 332.85 C 278.07 338.10 279.68 343.35 281.75 348.60 C 284.16 342.89 287.14 335.54 288.96 331.44 C 290.74 327.35 291.02 326.89 292.67 324.10 C 294.28 321.30 295.85 318.5 298.69 314.64 C 301.52 310.80 305.48 305.51 309.64 301 C 313.80 296.48 319.12 291.55 323.75 287.59 C 328.37 283.64 332.21 280.73 337.39 277.33 C 342.57 273.94 349.12 270.16 354.89 267.26 C 360.67 264.32 365.57 262.18 372.05 259.76 C 378.52 257.39 386.50 255.11 393.75 252.80 C 393.82 232.92 393.89 213.07 393.96 193.19 C 393.78 192.98 393.57 192.74 393.39 192.53 C 392.69 192.57 394.20 192.01 391.30 192.64 C 388.39 193.23 380.20 195.05 375.89 196.28 C 371.59 197.53 369.00 198.58 365.39 200.05 C 361.79 201.53 357.76 203.24 354.19 205.06 C 350.62 206.92 346.92 209.19 344.05 211.05 C 341.17 212.90 340.23 213.5 337.05 216.19 C 333.86 218.85 329.14 222.63 324.94 227.14 C 320.73 231.66 315.87 237.40 311.81 243.25 C 307.75 249.09 303.58 256.41 300.61 262.14 C 297.67 267.89 295.89 272.57 294 277.72 C 292.10 282.87 290.5 288.64 289.27 292.94 C 288.08 297.25 287.42 301.48 286.85 303.44 C 286.30 305.41 286.26 304.28 285.94 304.71 C 285.73 304.28 285.28 305.41 285.35 303.44 C 285.42 301.48 285.70 297.25 286.40 292.94 C 287.10 288.64 288.53 281.82 289.55 277.55 C 290.57 273.28 291.48 270.44 292.42 267.39 C 293.37 264.35 293.78 262.92 295.26 259.35 C 296.73 255.78 298.41 251.37 301.28 246.05 C 304.14 240.73 309.22 232.32 312.48 227.5 C 315.76 222.67 317.62 220.57 320.84 217 C 324.06 213.42 328.30 209.16 331.80 206.04 C 335.30 202.92 338.44 200.65 341.94 198.23 C 345.44 195.85 348.67 193.79 352.80 191.66 C 356.92 189.52 361.19 187.42 366.80 185.46 C 372.39 183.46 380.44 181.19 386.39 179.72 C 392.35 178.28 399.24 177.27 402.5 176.78 C 405.75 176.29 405.26 176.67 406 176.78 C 406.73 176.89 406.59 177.23 406.91 177.44 C 406.87 206.04 406.83 234.60 406.83 263.19 C 406.45 263.51 408.13 263.37 405.64 264.10 C 403.16 264.87 397.00 266.21 392 267.67 C 386.99 269.18 381.67 270.65 375.72 273 C 369.77 275.34 361.05 279.44 356.30 281.71 C 351.53 283.98 350.31 284.79 347.19 286.64 C 344.08 288.50 340.82 290.60 337.53 292.94 C 334.25 295.29 330.29 298.30 327.46 300.64 C 324.58 302.99 322.91 304.5 320.39 306.94 C 317.87 309.39 314.75 312.65 312.37 315.35 C 309.99 318.04 309.08 318.74 306.14 323.05 C 303.17 327.35 297.42 336.24 294.69 341.21 C 291.96 346.18 291.05 349.19 289.66 352.80 C 288.26 356.40 287.55 357.98 286.30 362.77 C 285.03 367.57 283.5 375.30 282.10 381.60 Z M 282.10 381.60 "/></symbol></svg>
+
+<div id="gate"><div class="box">
+<svg viewBox="0 0 560 560" role="img" aria-label="Logo da Reescrita"><use href="#logo"/></svg>
+<h2 style="text-align:center;margin:0">Entrar na Reescrita</h2>
+<form id="lg"><label>E-mail ou WhatsApp<input name="id" required autocomplete="username" placeholder="nome@email.com ou (47) 90000-0000"></label><button class="btn" type="submit">Entrar</button></form>
+<form id="lga" hidden><label>Usuário<input name="u" required autocomplete="username"></label><label>Senha<input name="p" type="password" required autocomplete="current-password"></label><button class="btn" type="submit" id="lgabtn">Entrar como administrador</button></form>
+<div class="msg err" id="lgmsg" role="alert" hidden></div>
+<button class="btn sm alt" type="button" id="lgtoggle" style="justify-self:center">Acesso de administrador</button>
+</div></div>
+<main>
+<div class="page" id="p-inicio">
+<div class="hero"><div class="wrap">
+<div>
+<h1>Escrevendo um futuro sustentável</h1>
+<p>Editora de livros impressos em papel reciclável. Publicamos novos autores e atendemos leitores e livrarias.</p>
+<div class="acts"><a class="btn" href="#encomendar">Ver catálogo</a><a class="btn alt" href="#sobre">Sobre a editora</a></div>
+</div>
+<svg viewBox="0 0 560 560" role="img" aria-label="Logo da Reescrita"><use href="#logo"/></svg>
+</div></div>
+<section class="blk"><div class="wrap">
+<h2>O que fazemos</h2>
+<div class="grid">
+<div class="card"><h3>Papel reciclável</h3><p>Publicamos e imprimimos livros em papel reciclável, com atenção ao material e ao projeto visual.</p></div>
+<div class="card" style="border-top-color:var(--orchid)"><h3>Novos autores</h3><p>Damos visibilidade a escritores independentes que desejam publicar.</p></div>
+<div class="card" style="border-top-color:var(--orange)"><h3>Atacado e varejo</h3><p>Vendas para livrarias e leitores, com condições especiais para grandes quantidades.</p></div>
+</div></div></section>
+</div>
+
+<div class="page" id="p-sobre"><section class="blk"><div class="wrap">
+<h2>Sobre a Reescrita</h2>
+<p class="lead">Segundo o MapBiomas, o Brasil perdeu cerca de 8,56 milhões de hectares de vegetação nativa em cinco anos. A Reescrita produz livros com menor impacto ambiental e abre espaço para novos autores.</p>
+<div class="grid">
+<div class="card"><h3>Missão</h3><p>Levar conhecimento e entretenimento ao mundo sem prejudicá-lo.</p></div>
+<div class="card" style="border-top-color:var(--orchid)"><h3>Visão</h3><p>Ser uma editora que abre espaço para mentes criativas e respeita o planeta.</p></div>
+<div class="card" style="border-top-color:var(--sky)"><h3>Valores</h3><ul><li>Sustentabilidade</li><li>Qualidade</li><li>Inovação</li><li>Respeito</li></ul></div>
+</div></div></section></div>
+
+<div class="page" id="p-encomendar"><section class="blk"><div class="wrap">
+<h2>Catálogo</h2>
+<p class="lead">Escolha um livro para seguir ao carrinho e finalizar o pedido.</p>
+<div class="grid" id="catalog" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))"></div>
+<p id="catmsg" class="muted"></p>
+</div></section></div>
+
+<div class="page" id="p-carrinho"><section class="blk"><div class="wrap">
+<h2>Carrinho</h2>
+<div class="box" id="cartbox"></div>
+<form class="box" id="ck" style="margin-top:18px" hidden>
+<h3 class="full">Dados do pedido</h3>
+<label>Nome<input name="nome" required autocomplete="name"></label>
+<label>E-mail<input name="email" type="email" required autocomplete="email"></label>
+<label>Telefone<input name="tel" type="tel" autocomplete="tel"></label>
+<label>Tipo de compra<select name="tipo"><option>Varejo</option><option>Atacado (livraria)</option></select></label>
+<label class="full">Endereço de entrega<input name="end" required autocomplete="street-address"></label>
+<label class="full">Observações<textarea name="obs" rows="2"></textarea></label>
+<p class="muted full" style="margin:0">Pagamento e frete são combinados após a confirmação do pedido.</p>
+<div class="full"><button class="btn" type="submit" id="ckbtn">Finalizar pedido</button></div>
+<div class="full msg" id="ckmsg" role="status" hidden></div>
+</form>
+</div></section></div>
+
+<div class="page" id="p-contato"><section class="blk"><div class="wrap">
+<h2>Contato e suporte</h2>
+<p class="lead">Fale com a equipe da Reescrita.</p><div class="grid" id="contacts"></div>
+</div></section></div>
+
+<div class="page" id="p-area-adm"><section class="blk"><div class="wrap">
+<div id="admno"><h2>Acesso restrito</h2><p class="lead">Esta área é exclusiva para administradores da Reescrita.</p></div>
+<div id="admok" hidden>
+<h2>Área administrativa</h2>
+<div class="tabs"><button class="btn sm" data-tab="livros">Livros</button><button class="btn sm alt" data-tab="pedidos">Pedidos</button></div>
+<div id="t-livros">
+<form class="box" id="bf">
+<h3 class="full">Cadastrar livro</h3>
+<label>Título<input name="titulo" required maxlength="120"></label>
+<label>Autor<input name="autor" required maxlength="80"></label>
+<label>Preço (R$)<input name="preco" type="number" min="0" step="0.01" required></label>
+<label>Capa (opcional)<input name="capa" type="file" accept="image/*"></label>
+<label class="full">Sinopse<textarea name="sinopse" rows="3" maxlength="400"></textarea></label>
+<div class="full"><button class="btn" type="submit" id="bbtn">Publicar no catálogo</button></div>
+<div class="full msg" id="bmsg" role="status" hidden></div>
+</form>
+<div class="row" style="margin-top:24px"><h3 style="margin:0">Livros publicados</h3><button class="btn sm" id="exp" type="button">Exportar catálogo</button></div><p class="muted" style="font-size:.9rem">O botão baixa o arquivo books.json. Envie esse arquivo ao repositório do GitHub, substituindo o anterior, para o catálogo aparecer para todos os visitantes.</p>
+<div id="alist"></div>
+</div>
+<div id="t-pedidos" hidden><div id="olist"></div></div>
+</div>
+</div></section></div>
+</main>
+
+<footer>© 2026 Reescrita · Escrevendo um futuro sustentável</footer>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var brl=function(n){return Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})};
+var COLORS=['#C8DCC3','#D89FCB','#BED7E5','#A9D8C5','#86BEAF','#ED9535'];
+var books=[],cart={},db=null,assets=null,isAdmin=false,uid=null;
+try{cart=JSON.parse(localStorage.getItem('rs-cart')||'{}')||{}}catch(e){cart={}}
+function save(){try{localStorage.setItem('rs-cart',JSON.stringify(cart))}catch(e){}}
+function byId(id){return books.filter(function(b){return b.id===id})[0]}
+function count(){return Object.keys(cart).reduce(function(a,k){return a+(byId(k)?cart[k]:0)},0)}
+
+function route(){
+var h=location.hash.slice(1)||'inicio';
+if(!$('p-'+h))h='inicio';
+document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('on',p.id==='p-'+h)});
+document.querySelectorAll('#nav a').forEach(function(a){a.classList.toggle('on',a.dataset.p===h)});
+window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+
+function cover(b,i){
+var ok=/^[0-9a-f]{32}$/.test(b.capa||'');
+return '<div class="cover" style="background:'+COLORS[i%COLORS.length]+'">'+(ok?'<img alt="Capa de '+esc(b.titulo)+'" src="/_blob/'+b.capa+'">':esc(b.titulo))+'</div>';
+}
+function renderCatalog(){
+$('catalog').innerHTML=books.map(function(b,i){
+return '<article class="book">'+cover(b,i)+'<div class="in"><h3 style="margin:0">'+esc(b.titulo)+'</h3><p class="by">'+esc(b.autor)+'</p><p class="syn">'+esc(b.sinopse)+'</p><div class="row"><strong>'+brl(b.preco)+'</strong><button class="btn sm" data-buy="'+esc(b.id)+'">Comprar</button></div></div></article>';
+}).join('');
+$('catmsg').textContent=books.length?'':(db?'Nenhum livro disponível no momento.':'Catálogo indisponível no momento.');
+}
+function renderCart(){
+var ids=Object.keys(cart).filter(byId),total=0;
+$('cc').textContent=count();
+if(!ids.length){$('cartbox').innerHTML='<p class="muted" style="margin:0">Seu carrinho está vazio. <a href="#encomendar">Ver catálogo</a></p>';$('ck').hidden=true;return}
+$('cartbox').innerHTML=ids.map(function(id){var b=byId(id),q=cart[id];total+=b.preco*q;
+return '<div class="item"><div><strong>'+esc(b.titulo)+'</strong><br><span class="muted">'+esc(b.autor)+' · '+brl(b.preco)+'</span></div><div class="qty"><button data-dec="'+esc(id)+'" aria-label="Diminuir">−</button><span>'+q+'</span><button data-inc="'+esc(id)+'" aria-label="Aumentar">+</button></div><button class="btn sm alt" data-rm="'+esc(id)+'">Remover</button></div>';
+}).join('')+'<div class="total">Total: '+brl(total)+'</div><a href="#encomendar">Continuar comprando</a>';
+$('ck').hidden=false;
+}
+function renderAdmin(){
+$('alist').innerHTML=books.map(function(b){return '<div class="item"><div><strong>'+esc(b.titulo)+'</strong><br><span class="muted">'+esc(b.autor)+' · '+brl(b.preco)+'</span></div><span></span><button class="btn sm alt" data-del="'+esc(b.id)+'">Excluir</button></div>'}).join('')||'<p class="muted">Nenhum livro publicado.</p>';
+}
+function renderOrders(list){
+$('olist').innerHTML=list.map(function(o){return '<div class="box" style="margin-bottom:12px"><strong>'+esc(o.nome)+'</strong> · '+esc(o.email)+' · '+esc(o.tel)+'<br><span class="muted">'+esc(o.tipo)+' · '+esc(o.end)+'</span><ul>'+(o.itens||[]).map(function(i){return '<li>'+esc(i.qtd)+'× '+esc(i.titulo)+'</li>'}).join('')+'</ul><strong>'+brl(o.total)+'</strong>'+(o.obs?'<br><span class="muted">'+esc(o.obs)+'</span>':'')+'</div>'}).join('')||'<p class="muted">Nenhum pedido recebido.</p>';
+}
+function refresh(){renderCatalog();renderCart();if(isAdmin)renderAdmin()}
+
+document.addEventListener('click',function(e){
+var t=e.target.closest('button');if(!t)return;var d=t.dataset;
+if(d.buy){cart[d.buy]=(cart[d.buy]||0)+1;save();renderCart();location.hash='carrinho'}
+else if(d.inc){cart[d.inc]++;save();renderCart()}
+else if(d.dec){cart[d.dec]=Math.max(1,cart[d.dec]-1);save();renderCart()}
+else if(d.rm){delete cart[d.rm];save();renderCart()}
+else if(d.del&&db&&confirm('Excluir este livro do catálogo?')){db.collection('books').doc(d.del).delete().then(function(){if(window.__localDel)window.__localDel(d.del)}).catch(function(){alert('Não foi possível excluir.')})}
+else if(d.tab){$('t-livros').hidden=d.tab!=='livros';$('t-pedidos').hidden=d.tab!=='pedidos';document.querySelectorAll('[data-tab]').forEach(function(x){x.classList.toggle('alt',x.dataset.tab!==d.tab)})}
+});
+
+function say(el,txt,err){el.hidden=false;el.className='full msg'+(err?' err':'');el.textContent=txt}
+
+$('ck').addEventListener('submit',function(e){
+e.preventDefault();
+var f=new FormData(e.target),ids=Object.keys(cart).filter(byId),total=0;
+var itens=ids.map(function(id){var b=byId(id);total+=b.preco*cart[id];return{id:id,titulo:b.titulo,preco:b.preco,qtd:cart[id]}});
+if(!itens.length||!db||!uid){say($('ckmsg'),'Não foi possível registrar o pedido agora. Tente novamente em instantes.',true);return}
+var o={nome:f.get('nome'),email:f.get('email'),tel:f.get('tel'),tipo:f.get('tipo'),end:f.get('end'),obs:f.get('obs'),itens:itens,total:total,criado:Date.now(),status:'novo'};
+$('ckbtn').disabled=true;
+var ref=db.collection('orders').doc(uid);ref.get().then(function(s){var prev=(s.exists&&s.data().pedidos)||[];return ref.set({pedidos:prev.concat([o])})}).then(function(){
+cart={};save();e.target.reset();renderCart();
+$('ck').hidden=true;$('cartbox').innerHTML='<p style="margin:0"><strong>Pedido registrado.</strong> Entraremos em contato por e-mail para confirmar pagamento e entrega.</p>';
+}).catch(function(){say($('ckmsg'),'Não foi possível registrar o pedido. Tente novamente.',true)}).then(function(){$('ckbtn').disabled=false});
+});
+
+$('bf').addEventListener('submit',function(e){
+e.preventDefault();
+var f=new FormData(e.target),file=f.get('capa'),btn=$('bbtn');
+if(!db)return;btn.disabled=true;
+var up=(file&&file.size&&assets)?assets.upload(file).then(function(r){return r.id}):Promise.resolve('');
+up.then(function(capa){
+return db.collection('books').doc('b'+Date.now()).set({titulo:f.get('titulo'),autor:f.get('autor'),preco:parseFloat(f.get('preco'))||0,sinopse:f.get('sinopse'),capa:capa,criado:Date.now()});
+}).then(function(){e.target.reset();say($('bmsg'),'Livro publicado no catálogo.')})
+.catch(function(){say($('bmsg'),'Não foi possível publicar. Verifique se sua conta tem permissão de edição nesta página.',true)})
+.then(function(){btn.disabled=false});
+});
+
+var sess=null,ordersUnsub=null;
+try{sess=JSON.parse(localStorage.getItem('rs-sess')||'null')}catch(e){}
+var CONTACTS=[{tipo:'WhatsApp',texto:'+55 47 9165-9588',link:'https://wa.me/554791659588'}];
+var ADM={"u": "adm.reescrita", "salt": "4a2e8bd70623ed1f", "iter": 200000, "h": "ba562bcef52aab325f3d60b4253773f599d0f5fa061b5ea738721e64d348b3a3"};
+function renderContacts(){$('contacts').innerHTML=CONTACTS.map(function(c){return '<div class="card"><h3>'+esc(c.tipo)+'</h3><p>'+esc(c.texto)+'</p><a class="btn sm" href="'+esc(c.link)+'" target="_blank" rel="noopener">Conversar</a></div>'}).join('')}
+function gmsg(t){var m=$('lgmsg');m.hidden=!t;m.textContent=t||''}
+function subOrders(){if(!db||ordersUnsub)return;ordersUnsub=db.collection('orders').onSnapshot(function(s){var all=[];s.docs.forEach(function(d){(d.data().pedidos||[]).forEach(function(x){all.push(x)})});renderOrders(all.sort(function(a,b){return (b.criado||0)-(a.criado||0)}))},function(){})}
+function setAdmin(on){isAdmin=on;$('admlink').hidden=!on;$('admno').hidden=on;$('admok').hidden=!on;if(on){renderAdmin();subOrders()}}
+function unlock(){document.body.classList.remove('locked');gmsg('');route();if(sess&&sess.id){var f=$('ck').elements;if(sess.id.indexOf('@')>-1)f['email'].value=sess.id;else f['tel'].value=sess.id}}
+function hashPw(pw){var enc=new TextEncoder();return crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']).then(function(k){return crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode(ADM.salt),iterations:ADM.iter},k,256)}).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+$('lg').addEventListener('submit',function(e){e.preventDefault();var v=new FormData(e.target).get('id').trim(),d=v.replace(/\D/g,'');
+var mail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),tel=!mail&&d.length>=10&&d.length<=13;
+if(!mail&&!tel){gmsg('Informe um e-mail ou WhatsApp válido.');return}
+sess={id:mail?v.toLowerCase():d};try{localStorage.setItem('rs-sess',JSON.stringify(sess))}catch(x){}
+e.target.reset();unlock()});
+$('lga').addEventListener('submit',function(e){e.preventDefault();var f=new FormData(e.target),b=$('lgabtn');b.disabled=true;
+hashPw(String(f.get('p'))).then(function(h){if(String(f.get('u')).trim()===ADM.u&&h===ADM.h){e.target.reset();setAdmin(true);unlock();location.hash='area-adm'}else gmsg('Usuário ou senha incorretos.')}).catch(function(){gmsg('Não foi possível validar o acesso neste navegador.')}).then(function(){b.disabled=false})});
+$('lgtoggle').addEventListener('click',function(){var a=$('lga').hidden;$('lga').hidden=!a;$('lg').hidden=a;this.textContent=a?'Voltar ao login de cliente':'Acesso de administrador';gmsg('')});
+$('logout').addEventListener('click',function(e){e.preventDefault();sess=null;try{localStorage.removeItem('rs-sess')}catch(x){}setAdmin(false);document.body.classList.add('locked');location.hash='inicio'});
+function localDb(){
+function load(n){try{return JSON.parse(localStorage.getItem('rs-db:'+n)||'{}')}catch(e){return {}}}
+function put(n,o){try{localStorage.setItem('rs-db:'+n,JSON.stringify(o))}catch(e){}}
+var subs={};
+function snap(n){var o=load(n);return{docs:Object.keys(o).map(function(k){return{id:k,exists:true,data:function(){return o[k]}}})}}
+function notify(n){(subs[n]||[]).forEach(function(f){f(snap(n))})}
+return{collection:function(n){return{
+doc:function(id){return{
+get:function(){var o=load(n);return Promise.resolve({exists:id in o,data:function(){return o[id]}})},
+set:function(d){var o=load(n);o[id]=d;put(n,o);notify(n);return Promise.resolve()},
+delete:function(){var o=load(n);delete o[id];put(n,o);notify(n);return Promise.resolve()}}},
+onSnapshot:function(f){(subs[n]=subs[n]||[]).push(f);f(snap(n));return function(){}}}}}
+}
+$('exp').addEventListener('click',function(){var data=books.map(function(b){return{id:b.id,titulo:b.titulo,autor:b.autor,preco:b.preco,sinopse:b.sinopse||'',capa:'',criado:b.criado||0}});var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='books.json';document.body.appendChild(a);a.click();a.remove()});
+route();refresh();renderContacts();
+if(sess&&sess.id)unlock();
+if(window.claude&&claude.use){
+var timer=setTimeout(renderCatalog,10000);
+Promise.all([claude.use('db'),claude.use('user'),claude.use('assets')]).then(function(r){
+clearTimeout(timer);db=r[0];assets=r[2];var u=r[1];
+if(u&&u.id)u.id().then(function(i){uid=i}).catch(function(){});
+if(!db){renderCatalog();return}
+db.collection('books').onSnapshot(function(s){books=s.docs.map(function(d){var x=d.data();x.id=d.id;return x}).sort(function(a,b){return (b.criado||0)-(a.criado||0)});refresh()},function(){renderCatalog()});
+if(isAdmin)subOrders();
+}).catch(function(){renderCatalog()});
+}else{db=localDb();uid='local';
+var base=[],mine=[];
+var dels=function(){try{return JSON.parse(localStorage.getItem('rs-del')||'[]')}catch(e){return[]}};
+var apply=function(){var d=dels(),ids={};mine.forEach(function(b){ids[b.id]=1});
+books=mine.concat(base.filter(function(b){return !ids[b.id]&&d.indexOf(b.id)<0})).sort(function(a,b){return (b.criado||0)-(a.criado||0)});refresh()};
+window.__localDel=function(id){var d=dels();d.push(id);try{localStorage.setItem('rs-del',JSON.stringify(d))}catch(e){}apply()};
+db.collection('books').onSnapshot(function(s){mine=s.docs.map(function(d){var x=d.data();x.id=d.id;return x});apply()});
+fetch('books.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():[]}).then(function(a){base=(Array.isArray(a)?a:[]).map(function(b){return{id:String(b.id),titulo:String(b.titulo||''),autor:String(b.autor||''),preco:Number(b.preco)||0,sinopse:String(b.sinopse||''),capa:'',criado:Number(b.criado)||0}});apply()}).catch(function(){});
+}
+})();
+</script>
+</body>
+</html>
